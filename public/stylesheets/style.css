@@ -32,7 +32,14 @@ h1 {
   text-decoration: underline;
   background-color: #eee;
 }
+#articles .article .title .titleName {
+  float: left;
+}
+#articles .article .title .deleteButton {
+  float: right;
+}
 #articles .article .body {
+  clear: both;
   background-color: #ffa;
 }
 .article .created_at {
