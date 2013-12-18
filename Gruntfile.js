@@ -13,13 +13,29 @@ module.exports = function(grunt) {
           }
         }
       }
+    },
+    mochaTest: {
+      test: {
+        options: {
+          reporter: 'spec',
+          growl: 'true'
+        },
+        src: ['test/**/*.js']
+      }
+    },
+    watch: {
+      scripts: {
+        files: ['./test/*.js', './*.js'],
+        tasks: ['mochaTest']
+      },
     }
   });
 
-  // Load the plugin that provides the "uglify" task.
   grunt.loadNpmTasks('grunt-nodemon');
+  grunt.loadNpmTasks('grunt-mocha-test');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task(s).
-  grunt.registerTask('default', ['nodemon']);
+  grunt.registerTask('default', ['nodemon', 'watch']);
 
 };

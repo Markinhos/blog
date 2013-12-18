@@ -11,6 +11,9 @@
     "stylus": "*",
     "grunt": "~0.4.2",
     "grunt-nodemon": "*",
-    "mongodb": ">= 0.9.6-7"
+    "mongodb": "1.2.8",
+    "should": "*",
+    "grunt-mocha-test": "*",
+    "grunt-contrib-watch": "*"
   }
 }

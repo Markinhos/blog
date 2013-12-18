@@ -4,9 +4,8 @@ var Server = require('mongodb').Server;
 var BSON = require('mongodb').BSON;
 var ObjectID = require('mongodb').ObjectID;
 
-ArticleProvider = function(host, port) {
-  this.db= new Db('node-mongo-blog', new Server(host, port, {auto_reconnect: true}, {}));
-  this.db.open(function(){});
+ArticleProvider = function(db) {
+  this.db = db;
 };
 
 //getCollection
@@ -24,8 +23,8 @@ ArticleProvider.prototype.findAll = function(callback) {
       if( error ) callback(error)
       else {
         article_collection.find().toArray(function(error, results) {
-          if( error ) callback(error)
-          else callback(null, results)
+          if( error ) callback(error);
+          else callback(null, results);
         });
       }
     });
@@ -59,6 +58,31 @@ ArticleProvider.prototype.addCommentToArticle = function(articleId, comment, cal
     }
   });
 };
+
+ArticleProvider.prototype.deleteAll = function(callback){
+
+  this.db.collection('articles', function(error, collection){
+      if (collection !==  null){
+        collection.remove();
+        callback(null, collection);
+      }
+      else{
+        callback(error);
+      }
+  });
+}
+
+ArticleProvider.prototype.delete = function(id, callback){
+  this.getCollection(function(error, article_collection){
+    if (error) callback( error);
+    else {
+      article_collection.remove({_id: new ObjectID(id)}, function(error, result){
+        if(error) callback(error)
+        else callback(null, result)
+      })
+    }
+  })
+}
 
 //save
 ArticleProvider.prototype.save = function(articles, callback) {

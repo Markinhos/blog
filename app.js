@@ -1,4 +1,5 @@
 var express = require('express');
+var DatabaseProvider = require('./databaseProvider').DatabaseProvider;
 var ArticleProvider = require('./articleprovider').ArticleProvider;
 
 var app = module.exports = express();
@@ -21,7 +22,7 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 
-var articleProvider= new ArticleProvider('localhost', 27017);
+var articleProvider = new ArticleProvider(new DatabaseProvider('node-mongo-blog-2','localhost', 27017).db);
 
 app.get('/', function(req, res){
   articleProvider.findAll( function(error,docs){
@@ -50,8 +51,14 @@ app.post('/blog/new', function(req, res){
       title: req.param('title'),
       body: req.param('body')
     }, function( error, docs) {
-      res.redirect('/')
+      res.redirect('/');
   });
+});
+
+app.post('/blog/delete/:id', function(req, res){
+    articleProvider.delete(req.params.id, function(error, docs){
+      res.redirect('/');
+    });
 });
 
 app.post('/blog/addComment', function(req, res) {
